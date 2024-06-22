@@ -6,7 +6,7 @@ export const fetchClinics = async (location: { lat: number; lng: number }) => {
     const request = {
       query: "Clinic",
       location,
-      radius: 5000,
+      radius: 1000,
     };
 
     service.textSearch(request, (results, status) => {

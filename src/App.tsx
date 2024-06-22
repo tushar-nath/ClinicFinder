@@ -11,7 +11,7 @@ const App: React.FC = () => {
     lat: 0,
     lng: 0,
   });
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading] = useState<boolean>(false);
   const [pincodeLoading, setPincodeLoading] = useState<boolean>(false);
   const [locationLoading, setLocationLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
