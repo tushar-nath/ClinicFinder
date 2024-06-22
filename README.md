@@ -1,46 +1,46 @@
-# Getting Started with Create React App
+# Clinic Finder
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+Clinic Finder is a web application that helps users locate nearby clinics based on their pincode or current location. It uses Google Maps API to display clinic locations and provide an interactive map interface.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- Search for clinics by entering a pincode
+- Use current location to find nearby clinics
+- Interactive map display with clinic markers
+- Info windows showing clinic details (name and address)
+- List view of nearby clinics with distance information
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technologies Used
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- React
+- TypeScript
+- Google Maps JavaScript API
+- React Spinners for loading animations
 
-### `npm test`
+## Setup
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up a Google Maps API key and add it to your environment variables
+4. Run the application: `npm run start`
 
-### `npm run build`
+## Usage
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Enter a pincode in the search box and click "Search by Pincode" to find clinics
+- Click "Detect My Location" to use your current location
+- Click on map markers to view clinic details
+- Scroll through the list view to see clinic information and distances
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Note
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Make sure you have a valid Google Maps API key with the necessary permissions (Geocoding API, Maps JavaScript API) enabled.
 
-### `npm run eject`
+## Contributing
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Contributions, issues, and feature requests are welcome. Feel free to check [issues page] if you want to contribute.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## License
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+[MIT]
