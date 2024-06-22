@@ -30,23 +30,39 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
 
   useEffect(() => {
     if (mapRef.current) {
-      const map = new google.maps.Map(mapRef.current, {
+      let zoom = 14;
+      if (clinics.length > 1) {
+        zoom = 12;
+      }
+
+      const map: google.maps.Map = new google.maps.Map(mapRef.current, {
         center,
-        zoom: 15,
+        zoom,
       });
 
-      // Add markers for clinics
+      const infoWindow = new google.maps.InfoWindow();
+
       clinics.forEach((clinic) => {
-        new google.maps.Marker({
+        const marker = new google.maps.Marker({
           position: clinic.location,
           map,
           title: clinic.name,
         });
+
+        marker.addListener("click", () => {
+          const content = `
+            <div>
+              <h3 style="font-weight: bold; margin-bottom: 5px;">${clinic.name}</h3>
+              <p>${clinic.address}</p>
+            </div>
+          `;
+          infoWindow.setContent(content);
+          infoWindow.open(map, marker);
+        });
       });
 
-      // Add a distinct marker for user's location if available
       if (userLocation) {
-        new google.maps.Marker({
+        const userMarker = new google.maps.Marker({
           position: userLocation,
           map,
           title: "Your Location",
@@ -54,6 +70,35 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
             url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
           },
         });
+
+        userMarker.addListener("click", () => {
+          const content = `
+            <div>
+              <h3 style="font-weight: bold; margin-bottom: 5px;">Your Location</h3>
+            </div>
+          `;
+          infoWindow.setContent(content);
+          infoWindow.open(map, userMarker);
+        });
+      }
+
+      if (clinics.length > 0 || userLocation) {
+        const bounds = new google.maps.LatLngBounds();
+        clinics.forEach((clinic) => bounds.extend(clinic.location));
+        if (userLocation) bounds.extend(userLocation);
+        map.fitBounds(bounds);
+
+        const listener = google.maps.event.addListener(
+          map,
+          "idle",
+          function () {
+            const currentZoom = map.getZoom();
+            if (currentZoom !== undefined && currentZoom > 15) {
+              map.setZoom(15);
+            }
+            google.maps.event.removeListener(listener);
+          }
+        );
       }
     }
   }, [clinics, center, userLocation]);
