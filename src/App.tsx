@@ -12,7 +12,8 @@ const App: React.FC = () => {
     lng: 0,
   });
   const [loading, setLoading] = useState<boolean>(false);
-  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const [pincodeLoading, setPincodeLoading] = useState<boolean>(false);
+  const [locationLoading, setLocationLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const App: React.FC = () => {
   }, []);
 
   const handlePincodeSubmit = async (pincode: string) => {
-    setButtonLoading(true);
+    setPincodeLoading(true);
     try {
       console.log("Submitting pincode:", pincode);
       const location = await geocodePincode(pincode);
@@ -40,12 +41,12 @@ const App: React.FC = () => {
       console.error("Error:", err);
       setError(err instanceof Error ? err.message : String(err));
     } finally {
-      setButtonLoading(false);
+      setPincodeLoading(false);
     }
   };
 
   const handleDetectLocation = async () => {
-    setButtonLoading(true);
+    setLocationLoading(true);
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
@@ -67,13 +68,13 @@ const App: React.FC = () => {
           console.error("Error:", err);
           setError((err as Error).message);
         } finally {
-          setButtonLoading(false);
+          setLocationLoading(false);
         }
       },
       (err) => {
         console.error("Geolocation error:", err);
         setError("Failed to detect location");
-        setButtonLoading(false);
+        setLocationLoading(false);
       }
     );
   };
@@ -84,10 +85,11 @@ const App: React.FC = () => {
         <PincodeInput
           onPincodeSubmit={handlePincodeSubmit}
           onDetectLocation={handleDetectLocation}
-          loading={buttonLoading}
+          pincodeLoading={pincodeLoading}
+          locationLoading={locationLoading}
         />
         {error && <p className="text-red-500">{error}</p>}
-        {clinics.length === 0 && !buttonLoading && (
+        {clinics.length === 0 && !pincodeLoading && !locationLoading && (
           <p className="text-gray-500 mt-4">
             Enter a pincode or use location detection to find clinics.
           </p>

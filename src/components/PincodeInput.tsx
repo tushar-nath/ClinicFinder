@@ -4,13 +4,15 @@ import { BeatLoader } from "react-spinners";
 interface PincodeInputProps {
   onPincodeSubmit: (pincode: string) => void;
   onDetectLocation: () => void;
-  loading: boolean;
+  pincodeLoading: boolean;
+  locationLoading: boolean;
 }
 
 const PincodeInput: React.FC<PincodeInputProps> = ({
   onPincodeSubmit,
   onDetectLocation,
-  loading,
+  pincodeLoading,
+  locationLoading,
 }) => {
   const [pincode, setPincode] = useState<string>("");
 
@@ -27,21 +29,34 @@ const PincodeInput: React.FC<PincodeInputProps> = ({
           value={pincode}
           onChange={(e) => setPincode(e.target.value)}
           placeholder="Enter pincode"
-          className="p-2 border rounded w-full"
+          className="p-2 border rounded w-full mb-2"
         />
-        <button
-          type="submit"
-          className="mt-2 p-2 bg-blue-500 text-white rounded w-full flex justify-center items-center"
-        >
-          {loading ? <BeatLoader size={8} color="#fff" /> : "Search by Pincode"}
-        </button>
+        <div className="flex space-x-2">
+          <button
+            type="submit"
+            className="p-2 bg-blue-500 text-white rounded flex-1 flex justify-center items-center h-10"
+            disabled={pincodeLoading}
+          >
+            {pincodeLoading ? (
+              <BeatLoader size={8} color="#fff" />
+            ) : (
+              "Search by Pincode"
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={onDetectLocation}
+            className="p-2 bg-green-500 text-white rounded flex-1 flex justify-center items-center h-10"
+            disabled={locationLoading}
+          >
+            {locationLoading ? (
+              <BeatLoader size={8} color="#fff" />
+            ) : (
+              "Detect My Location"
+            )}
+          </button>
+        </div>
       </form>
-      <button
-        onClick={onDetectLocation}
-        className="p-2 bg-green-500 text-white rounded w-full flex justify-center items-center"
-      >
-        {loading ? <BeatLoader size={8} color="#fff" /> : "Detect My Location"}
-      </button>
     </div>
   );
 };
