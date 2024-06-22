@@ -34,7 +34,7 @@ const PincodeInput: React.FC<PincodeInputProps> = ({
         <div className="flex space-x-2">
           <button
             type="submit"
-            className="p-2 bg-blue-500 text-white rounded flex-1 flex justify-center items-center h-10"
+            className="p-2 bg-black text-white rounded flex-1 flex justify-center items-center h-10"
             disabled={pincodeLoading}
           >
             {pincodeLoading ? (
@@ -46,7 +46,7 @@ const PincodeInput: React.FC<PincodeInputProps> = ({
           <button
             type="button"
             onClick={onDetectLocation}
-            className="p-2 bg-green-500 text-white rounded flex-1 flex justify-center items-center h-10"
+            className="p-2 bg-green-600 text-white rounded flex-1 flex justify-center items-center h-10"
             disabled={locationLoading}
           >
             {locationLoading ? (

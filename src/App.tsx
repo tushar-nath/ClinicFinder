@@ -11,7 +11,11 @@ const App: React.FC = () => {
     lat: 0,
     lng: 0,
   });
-  const [loading] = useState<boolean>(false);
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [pincodeLoading, setPincodeLoading] = useState<boolean>(false);
   const [locationLoading, setLocationLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +58,7 @@ const App: React.FC = () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
+          setUserLocation(location); // Set user's location
           const clinics: any = await fetchClinics(location);
           setCenter(location);
           setClinics(
@@ -110,7 +115,11 @@ const App: React.FC = () => {
         {loading ? (
           <BeatLoader size={15} color="#123abc" loading={loading} />
         ) : (
-          <MapDisplay clinics={clinics} center={center} />
+          <MapDisplay
+            clinics={clinics}
+            center={center}
+            userLocation={userLocation}
+          />
         )}
       </div>
     </div>
