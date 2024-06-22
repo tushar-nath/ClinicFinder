@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PincodeInput from "./components/PincodeInput";
 import MapDisplay from "./components/MapDisplay";
 import { fetchClinics } from "./api";
 import { calculateDistance, geocodePincode } from "./utils";
+import { BeatLoader } from "react-spinners";
 
 const App: React.FC = () => {
   const [clinics, setClinics] = useState<any[]>([]);
@@ -10,12 +11,22 @@ const App: React.FC = () => {
     lat: 0,
     lng: 0,
   });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    setCenter({ lat: 0, lng: 0 });
+  }, []);
+
   const handlePincodeSubmit = async (pincode: string) => {
+    setButtonLoading(true);
     try {
+      console.log("Submitting pincode:", pincode);
       const location = await geocodePincode(pincode);
+      console.log("Geocoded location:", location);
       const clinics: any = await fetchClinics(location);
+      console.log("Fetched clinics:", clinics);
       setCenter(location);
       setClinics(
         clinics.sort(
@@ -26,11 +37,15 @@ const App: React.FC = () => {
       );
       setError(null);
     } catch (err) {
-      setError(err as string);
+      console.error("Error:", err);
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setButtonLoading(false);
     }
   };
 
   const handleDetectLocation = async () => {
+    setButtonLoading(true);
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
@@ -49,34 +64,53 @@ const App: React.FC = () => {
           );
           setError(null);
         } catch (err) {
-          setError(err as string);
+          console.error("Error:", err);
+          setError((err as Error).message);
+        } finally {
+          setButtonLoading(false);
         }
       },
       (err) => {
+        console.error("Geolocation error:", err);
         setError("Failed to detect location");
+        setButtonLoading(false);
       }
     );
   };
 
   return (
-    <div className="flex flex-col items-center p-4">
-      <PincodeInput
-        onPincodeSubmit={handlePincodeSubmit}
-        onDetectLocation={handleDetectLocation}
-      />
-      {error && <p className="text-red-500">{error}</p>}
-      <MapDisplay clinics={clinics} center={center} />
-      <ul className="mt-4 w-full">
-        {clinics.map((clinic, index) => (
-          <li key={index} className="p-2 border-b">
-            <h2 className="font-bold">{clinic.name}</h2>
-            <p>{clinic.address}</p>
-            <p>
-              {calculateDistance(center, clinic.location).toFixed(2)} km away
-            </p>
-          </li>
-        ))}
-      </ul>
+    <div className="flex h-screen">
+      <div className="w-1/3 p-4 flex flex-col">
+        <PincodeInput
+          onPincodeSubmit={handlePincodeSubmit}
+          onDetectLocation={handleDetectLocation}
+          loading={buttonLoading}
+        />
+        {error && <p className="text-red-500">{error}</p>}
+        {clinics.length === 0 && !buttonLoading && (
+          <p className="text-gray-500 mt-4">
+            Enter a pincode or use location detection to find clinics.
+          </p>
+        )}
+        <ul className="mt-4 overflow-y-auto flex-grow">
+          {clinics.map((clinic, index) => (
+            <li key={index} className="p-2 border-b">
+              <h2 className="font-bold">{clinic.name}</h2>
+              <p>{clinic.address}</p>
+              <p>
+                {calculateDistance(center, clinic.location).toFixed(2)} km away
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="w-2/3 h-full">
+        {loading ? (
+          <BeatLoader size={15} color="#123abc" loading={loading} />
+        ) : (
+          <MapDisplay clinics={clinics} center={center} />
+        )}
+      </div>
     </div>
   );
 };

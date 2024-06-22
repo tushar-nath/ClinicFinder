@@ -21,7 +21,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ clinics, center }) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (mapRef.current && center.lat && center.lng) {
+    if (mapRef.current) {
       const map = new google.maps.Map(mapRef.current, {
         center,
         zoom: 12,
@@ -37,7 +37,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ clinics, center }) => {
     }
   }, [clinics, center]);
 
-  return <div id="map" ref={mapRef} className="w-full h-96"></div>;
+  return <div id="map" ref={mapRef} className="w-full h-full"></div>;
 };
 
 export default MapDisplay;

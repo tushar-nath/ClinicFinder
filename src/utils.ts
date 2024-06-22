@@ -18,9 +18,10 @@ export const calculateDistance = (
 
 export const geocodePincode = async (pincode: string) => {
   const response = await fetch(
-    `https://maps.googleapis.com/maps/api/geocode/json?address=${pincode}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${pincode}&key=${process.env.REACT_APP_GOOGLE_MAPS_API}`
   );
   const data = await response.json();
+  console.log("data", data);
   if (data.status === "OK") {
     const location = data.results[0].geometry.location;
     return { lat: location.lat, lng: location.lng };
