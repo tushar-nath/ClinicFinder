@@ -4,9 +4,9 @@ export const fetchClinics = async (location: { lat: number; lng: number }) => {
       document.createElement("div")
     );
     const request = {
-      query: "Clinic",
+      query: "Gynoveda",
       location,
-      radius: 1000,
+      radius: 1000000,
     };
 
     service.textSearch(request, (results, status) => {
