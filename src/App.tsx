@@ -58,7 +58,7 @@ const App: React.FC = () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          setUserLocation(location); // Set user's location
+          setUserLocation(location);
           const clinics: any = await fetchClinics(location);
           setCenter(location);
           setClinics(
